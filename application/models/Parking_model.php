@@ -25,9 +25,7 @@ class Parking_model extends CI_Model
             'address' => $this->input->post('address', TRUE)
         ];
         $this->db->insert('clients', $data);
-        $query = $this->db->get_where('clients', $data);
-        $res = $query->row_array();
-        return $res['id'];
+        return $this->db->insert_id();
     }
 
     public function add_car($client_id){
