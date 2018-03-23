@@ -35,6 +35,7 @@ class Parking_model extends CI_Model
         $data = ['client_id' => $client_id, 'status' => 0];
         $data += $this->input->post('new_car', TRUE);
         $this->db->insert('cars', $data);
+        return $this->db->insert_id();
     }
 
     public function get_client($id){
@@ -48,8 +49,8 @@ class Parking_model extends CI_Model
     }
 
     public function get_clients_cars($offset = NULL, $count){
-        $query = $this->db->select('full_name, label, model, color, reg_plate, client_id, cars.id')->from('cars')
-            ->join('clients', 'clients.id = cars.client_id')
+        $query = $this->db->select('full_name, label, model, color, reg_plate, clients.id as client_id, cars.id')->from('cars')
+            ->join('clients', 'clients.id = cars.client_id', 'right')
             ->limit($count, $offset)->get();
         return $query->result_array();
     }

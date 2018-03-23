@@ -80,6 +80,7 @@ class Clients extends CI_Controller
     }
 
     public function save_cars($id){
+        $data = [];
         $this->parking_model->save_cars();
         if ($this->input->post('new_car'))
         {
@@ -103,14 +104,19 @@ class Clients extends CI_Controller
             $this->form_validation->set_rules($rules);
             if ($this->form_validation->run() == FALSE)
             {
-                $this->edit($id);
+                //$this->edit($id);
+                $data['errors'] = validation_errors('<div class="alert alert-danger alert-dismissible mt-3" role="alert">','<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             }
             else
                 {
-                $this->parking_model->add_car($id);
-                redirect('clients/edit/'.$id);
+                $data['car_id'] = $this->parking_model->add_car($id);
+                $data['success'] = '<div class="alert alert-success alert-dismissible mt-3" role="alert">Список автомобилей сохранён<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button></div>';
+                //redirect('clients/edit/'.$id);
             }
         }
+        echo json_encode($data);
     }
 
     public function save_client($id) {
